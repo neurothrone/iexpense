@@ -15,3 +15,9 @@ struct ExpenseItem: Identifiable {
 }
 
 extension ExpenseItem: Codable {}
+
+extension ExpenseItem: Equatable {
+  static func ==(lhs: ExpenseItem, rhs: ExpenseItem) -> Bool {
+    lhs.id == rhs.id
+  }
+}

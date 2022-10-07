@@ -41,8 +41,7 @@ struct ContentView: View {
 
 extension ContentView {
   private func delete(item: ExpenseItem) {
-    guard let index = manager.items.firstIndex(where: { $0.id == item.id }) else { return }
-    
+    guard let index = manager.items.firstIndex(of: item) else { return }
     manager.items.remove(at: index)
   }
 }

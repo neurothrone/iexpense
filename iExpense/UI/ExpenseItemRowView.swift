@@ -22,21 +22,7 @@ struct ExpenseItemRowView: View {
       
       Spacer()
       Text(item.amount.toLocalCurrency)
-        .foregroundColor(amountColorStyle)
-    }
-  }
-  
-  var amountColorStyle: Color {
-    let amount = item.amount
-    switch amount {
-    case ...0:
-      return .secondary
-    case ...10:
-      return .green
-    case 10...100:
-      return .orange
-    default:
-      return .red
+        .style(for: item)
     }
   }
 }

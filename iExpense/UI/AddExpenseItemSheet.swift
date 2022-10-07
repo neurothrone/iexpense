@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct AddExpenseItemSheet: View {
+  private enum Field {
+    case name, amount
+  }
+  
   @Environment(\.dismiss) private var dismiss
+  @FocusState private var focusedField: Field?
   
   @ObservedObject var manager: ExpenseManager
   
@@ -27,9 +32,13 @@ struct AddExpenseItemSheet: View {
       Form {
         TextField("Name", text: $name)
           .autocorrectionDisabled(true)
+          .focused($focusedField, equals: .name)
+          .submitLabel(.next)
         
         TextField("Amount", value: $amount, format: .localCurrency)
           .keyboardType(.decimalPad)
+          .focused($focusedField, equals: .amount)
+          .submitLabel(.done)
         
         Section {
           Picker("Expense Type", selection: $selectedType) {
@@ -52,8 +61,24 @@ struct AddExpenseItemSheet: View {
         .buttonStyle(.borderedProminent)
         .disabled(name.isEmpty || amount == .zero)
       }
+      .onSubmit {
+        switch focusedField {
+        case .name:
+          focusedField = .amount
+        default:
+          focusedField = nil
+        }
+      }
       .navigationTitle("Add New Expense")
       .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItemGroup(placement: .keyboard) {
+          Spacer()
+          Button("Dismiss") {
+            focusedField = nil
+          }
+        }
+      }
     }
   }
 }
